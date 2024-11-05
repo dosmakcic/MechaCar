@@ -9,7 +9,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   runApp(MaterialApp(
-    initialRoute: '/login',
+    initialRoute: '/driver_home',
     routes: {
       '/login': (context) => LoginScreen(),
       '/register_driver': (context) => RegisterScreen(),

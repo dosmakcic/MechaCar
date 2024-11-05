@@ -40,6 +40,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
+                          Text(city),
+                          SizedBox(width: 8),
+                          Text('Cijena: 2000'),
+                          SizedBox(width: 8),
+                          Text('Datum: 10.06.2022'),
                           ElevatedButton(
                             onPressed: () {
                               // Ovdje možete dodati funkcionalnost za prihvaćanje
