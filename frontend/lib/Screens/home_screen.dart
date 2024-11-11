@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pretraži Mehaničare'),
+        title: Text('Pretraži Mehaničare '),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
