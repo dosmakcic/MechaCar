@@ -9,6 +9,7 @@ import com.dosmakcic.mechanear.services.DriverService;
 
 @RestController
 @RequestMapping("/driver")
+@CrossOrigin
 public class DriverController {
 
     @Autowired

@@ -12,7 +12,10 @@ public class MechanicService {
 
     @Autowired
     private MechanicRepository mechanicRepository;
-
+    
+    public  List<Mechanic> getAllMechanics(){
+       return mechanicRepository.findAll();
+    }
 
     public Optional<Mechanic> getMechanicById(Long id) {
         return mechanicRepository.findById(id);

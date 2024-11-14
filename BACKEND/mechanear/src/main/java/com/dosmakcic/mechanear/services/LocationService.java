@@ -21,43 +21,41 @@ public class LocationService {
 
     @PostConstruct
     public void initDatabase() {
+        // Proverava da li tabela već sadrži podatke
+        if (locationRepository.count() > 0) {
+            System.out.println("Podaci već postoje u bazi, preskačem učitavanje.");
+            return;  
+        }
+
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(getClass().getResourceAsStream("/hr-cities.csv"), StandardCharsets.UTF_8))) {
             
             String line;
             List<Location> locations = new ArrayList<>();
-            reader.readLine(); 
-            
+            reader.readLine();  
+
             while ((line = reader.readLine()) != null) {
                 String[] fields = line.split(";");
-                int count=0;
                 
                 Long id = Long.parseLong(fields[4]);
                 String city = fields[0];
                 String country = fields[3];
-                
-                
                 double latitude = Double.parseDouble(fields[1].replace(",", "."));
                 double longitude = Double.parseDouble(fields[2].replace(",", "."));
 
                 Location location = new Location(id, city, country, latitude, longitude);
-                
                 locations.add(location);
-                
-
-                
             }
-           
-                locationRepository.saveAll(locations);
-            
-            
+
+            locationRepository.saveAll(locations);
+            System.out.println("Podaci su uspešno učitani u bazu.");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public List<Location> getAllLocations() {
-        return locationRepository.findAll(); // Ovo vraća sve lokacije iz baze
+        return locationRepository.findAll(); 
     }
 }
-

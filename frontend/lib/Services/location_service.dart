@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class LocationService {
   Future<Position> determinePosition() async {
@@ -43,5 +45,15 @@ class LocationService {
     }
   }
 
-  Future<void> fetchLocation(String query) async {}
+  Future<List<Map<String, dynamic>>> searchCities(String query) async {
+    final response = await http.get(Uri.parse(
+        'http://localhost:8080/api/locations/search?cityName=$query'));
+    if (response.statusCode == 200) {
+      List<dynamic> data = json.decode(response.body);
+      print("Cities data: $data"); // Dodano za ispis rezultata
+      return data.map((city) => city as Map<String, dynamic>).toList();
+    } else {
+      throw Exception('Failed to load cities');
+    }
+  }
 }
