@@ -64,6 +64,10 @@ public class Mechanic {
         this.password = password;
     }
 
+    public String getPassword(){
+        return this.password;
+    }
+
     public void setLocation(Location location) {
         this.location = location;
     }

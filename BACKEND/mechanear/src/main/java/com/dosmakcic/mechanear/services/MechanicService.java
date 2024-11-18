@@ -17,6 +17,10 @@ public class MechanicService {
        return mechanicRepository.findAll();
     }
 
+    public boolean emailExists(String email){
+        return mechanicRepository.findByEmail(email).isPresent();
+    }
+
     public Optional<Mechanic> getMechanicById(Long id) {
         return mechanicRepository.findById(id);
     }

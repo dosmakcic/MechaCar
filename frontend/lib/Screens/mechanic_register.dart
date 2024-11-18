@@ -39,7 +39,7 @@ class _RegisterScreenMechanicState extends State<RegisterScreenMechanic> {
   }
 
   void _searchCities(String query) async {
-    if (query.length < 2) return; // Pokreće se samo za unos duži od 2 slova
+    if (query.length < 2) return;
     List<Map<String, dynamic>> cities =
         await _locationService.searchCities(query);
     setState(() {
@@ -62,9 +62,13 @@ class _RegisterScreenMechanicState extends State<RegisterScreenMechanic> {
 
     if (response.statusCode == 200) {
       print("Mechanic registered successfully");
-      Navigator.pushNamed(context, '/mechanic_home');
+      Navigator.pushReplacementNamed(context, '/mechanic_home');
+    } else if (response.statusCode == 409) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Email already in use')));
     } else {
-      print("Failed to register mechanic");
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Resistration failed')));
     }
   }
 
@@ -123,16 +127,20 @@ class _RegisterScreenMechanicState extends State<RegisterScreenMechanic> {
             SizedBox(
               height: 20.0,
             ),
-            // Ispis trenutne adrese ili poruke o nedostatku adrese
             Text(_currentAddress ?? "No location selected"),
             ElevatedButton(
-              onPressed: _locateUser, // Pozivanje funkcije za dohvat lokacije
+              onPressed: _locateUser,
               child: Text('Get Current Location'),
             ),
             ElevatedButton(
               onPressed: _registerMechanic,
               child: Text('Register Mechanic'),
-            )
+            ),
+            ElevatedButton(
+              onPressed: () =>
+                  Navigator.pushReplacementNamed(context, '/login'),
+              child: Text('Login'),
+            ),
           ],
         ),
       ),

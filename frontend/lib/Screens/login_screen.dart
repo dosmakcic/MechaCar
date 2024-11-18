@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:frontend/Services/login.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
@@ -16,8 +18,7 @@ class LoginScreen extends StatelessWidget {
           children: [
             TextField(
               controller: usernameController,
-              decoration: InputDecoration(
-                  labelText: 'Email'), // Ostavite ovo bez provjera
+              decoration: InputDecoration(labelText: 'Email'),
               keyboardType: TextInputType.emailAddress,
             ),
             TextField(
@@ -27,7 +28,11 @@ class LoginScreen extends StatelessWidget {
             ),
             SizedBox(height: 20.0),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                final loginService = LoginService();
+                loginService.login(
+                    context, usernameController.text, passwordController.text);
+              },
               child: Text('Login'),
             ),
             TextButton(

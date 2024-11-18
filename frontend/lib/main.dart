@@ -12,7 +12,7 @@ void main() {
     initialRoute: '/register_mechanic',
     routes: {
       '/login': (context) => LoginScreen(),
-      '/register_driver': (context) => RegisterScreen(),
+      '/register_driver': (context) => RegisterScreenDriver(),
       '/register_mechanic': (context) => RegisterScreenMechanic(),
       '/driver_home': (context) => HomeScreen(),
       '/mechanic_home': (context) => MechanicHome()
