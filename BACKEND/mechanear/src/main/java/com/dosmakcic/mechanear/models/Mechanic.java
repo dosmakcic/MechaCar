@@ -3,6 +3,8 @@ package com.dosmakcic.mechanear.models;
 
 import jakarta.persistence.*;
 import java.util.List;
+import java.util.Optional;
+
 import com.dosmakcic.mechanear.models.Location;
 
 
@@ -52,6 +54,11 @@ public class Mechanic {
     public Location getLocation() {
         return this.location;
     }
+
+    public List<Driver> getChosenByDrivers() {
+        return chosenbyDrivers;
+    }
+
     public void setName(String name) {
         this.name = name;
     }

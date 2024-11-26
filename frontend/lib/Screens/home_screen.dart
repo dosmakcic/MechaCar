@@ -8,6 +8,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late int userId;
+  late String userName;
+  Map<String, dynamic>? driverData;
   String city = '';
   List<dynamic> allMechanics = [];
   List<dynamic> filteredMechanics = [];
@@ -17,6 +20,51 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     fetchAllMechanics();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // Preuzimanje argumenata prosleđenih iz login-a
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+
+    // Osiguravamo da su id i name prisutni u argumentima
+    userId = args['id'] ?? 0; // Ako nema id, postavljamo na 0
+    userName = args['name'] ??
+        'Početna'; // Ako nema name, postavljamo default vrednost
+
+    fetchDriverData();
+  }
+
+  Future<void> fetchDriverData() async {
+    final url = Uri.parse('http://localhost:8080/driver/$userId');
+
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        setState(() {
+          driverData = json.decode(response.body);
+          userName = driverData!['name'] ??
+              'Početna'; // Ako nema imena u odgovoru, postavljamo default
+          isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to load driver data');
+      }
+    } catch (error) {
+      setState(() {
+        isLoading =
+            false; // Kada se završi učitavanje, postavimo isLoading na false
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content:
+                Text('Failed to load driver data. Please try again later.')),
+      );
+    }
   }
 
   Future<void> fetchAllMechanics() async {
@@ -53,14 +101,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> sendRequestToMechanic(int mechanicId) async {
-    final url = Uri.parse('http://localhost:8080/requests');
+    final url = Uri.parse('http://localhost:8080/mechanics/request');
     try {
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
           'mechanicId': mechanicId,
-          'driverId': 1, // Zamijenite stvarnim ID-jem vozača
+          'driverId': userId, // Zamijenite stvarnim ID-jem vozača
         }),
       );
       if (response.statusCode == 200) {
@@ -100,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
             isLoading
                 ? Center(child: CircularProgressIndicator())
                 : filteredMechanics.isEmpty
-                    ? Text('Nema dostupnih mehaničara za zadati grad.')
+                    ? Text('Nema dostupnih mehaničara za zadani grad.')
                     : Expanded(
                         child: ListView.builder(
                           itemCount: filteredMechanics.length,
